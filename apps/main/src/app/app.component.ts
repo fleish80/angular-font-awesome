@@ -1,14 +1,36 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconDefinition, faCoffee} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
-  selector: 'angular-font-awesome-root',
-  templateUrl: './app.component.html',
+  imports: [
+    FontAwesomeModule,
+    AsyncPipe,
+    NgIf
+  ],
+  selector: 'df-root',
+  template: `
+    <fa-icon [icon]="faCoffee"/>
+
+    <fa-icon *ngIf="faHouse" [icon]="faHouse"/>
+
+  `,
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'main';
+  faCoffee = faCoffee;
+  faHouse!: IconDefinition;
+
+  constructor() {
+    console.log('faCoffee', faCoffee);
+    this.setIcon();
+  }
+
+  async setIcon() {
+    const res = await import('@fortawesome/free-solid-svg-icons/faHouse');
+    console.log('res',res);
+    this.faHouse = res.faHouse;
+  }
 }
